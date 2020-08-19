@@ -18,9 +18,17 @@ namespace MyFirstMvcApp.Controllers
             _logger = logger;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
+            _logger.LogInformation("Accessing Index method");
+
             return View();
+        }
+
+        public IActionResult Test(string id)
+        {
+            return View("Test", id);
         }
 
         public IActionResult Privacy()
