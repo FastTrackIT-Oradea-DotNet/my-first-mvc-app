@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using MyFirstMvcApp.Data;
 using MyFirstMvcApp.Services;
+using MyFirstMvcApp.Configuration;
 
 namespace MyFirstMvcApp
 {
@@ -21,6 +22,8 @@ namespace MyFirstMvcApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<HostingSettings>(Configuration.GetSection("HostingSettingsSection"));
+
             services.AddControllersWithViews();
 
             services.AddDbContext<MyFirstMvcAppDbContext>(options =>
