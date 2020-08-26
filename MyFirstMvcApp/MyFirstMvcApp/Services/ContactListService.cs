@@ -3,6 +3,7 @@ using MyFirstMvcApp.Data;
 using MyFirstMvcApp.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace MyFirstMvcApp.Services
@@ -31,6 +32,15 @@ namespace MyFirstMvcApp.Services
 
         public async Task<bool> CreateEntryAsync(ContactListEntry entry)
         {
+            if (entry.PostedAvatarFile != null)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await entry.PostedAvatarFile.CopyToAsync(memoryStream);
+                    entry.AvatarContent = memoryStream.ToArray();
+                }
+            }
+
             _context.Add(entry);
 
             var insertedRows = await _context.SaveChangesAsync();

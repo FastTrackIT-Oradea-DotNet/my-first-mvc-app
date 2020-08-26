@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MyFirstMvcApp.Models
 {
@@ -31,5 +33,36 @@ namespace MyFirstMvcApp.Models
         [StringLength(50)]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
+
+        [DataType(DataType.Upload)]
+        public byte[] AvatarContent { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Avatar Image")]
+        public IFormFile PostedAvatarFile { get; set; }
+
+        [NotMapped]
+        [FileExtensions(Extensions = "png")]
+        public string PostedAvatarFileName
+        {
+            get
+            {
+                return PostedAvatarFile?.FileName ?? "None.png";
+            }
+        }
+
+        [NotMapped]
+        public string SrcBase64
+        {
+            get
+            {
+                if ((AvatarContent?.Length ?? 0) <= 0)
+                {
+                    return "/img/no-content.png";
+                }
+
+                return $"data:image/png;base64,{Convert.ToBase64String(AvatarContent)}";
+            }
+        }
     }
 }
